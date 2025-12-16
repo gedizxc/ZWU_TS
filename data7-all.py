@@ -11,7 +11,7 @@ if not os.path.exists(image_dir):
     os.makedirs(image_dir)
 
 stats_file = "batch_stats.txt"
-seq_len = 96  # 每一批的长度
+seq_len = 97  # 每一批的长度
 
 # 读取数据
 df = pd.read_csv('ETTh1.csv')
@@ -43,6 +43,7 @@ def simple_dtw_distance(s1, s2):
                                           dtw_matrix[i - 1, j - 1])
     return dtw_matrix[n, m]
 
+print("d")
 
 # --- 3. 主循环处理 ---
 
