@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="第三次提交">
-      <change afterPath="$PROJECT_DIR$/test1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="97">
+      <change afterPath="$PROJECT_DIR$/1.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,22 +22,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "phanm4822-sketch"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;phanm4822-sketch&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "git@github.com:gedizxc/ZWU_TS.git",
-    "accountId": "21e45ed1-a093-4eb6-b596-8188c76ea4ad"
+    "accountId": "32e55742-9c34-4374-88c0-d598cd360b54"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="36uz8qJ0bRbXSNBYMgK5r5wWcdt" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -51,7 +52,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/ZWU_TS",
+    "last_opened_file_path": "/Users/gedizxc/Downloads/Code/ZWU_TS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -63,8 +64,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PY-252.26199.168" />
-        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-PY-252.28238.29" />
+        <option value="bundled-python-sdk-a101402ee41c-968fe969f28a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.28238.29" />
       </set>
     </attachedChunks>
   </component>
@@ -77,6 +78,7 @@
       <updated>1765871087600</updated>
       <workItem from="1765871088621" duration="1000" />
       <workItem from="1765872685089" duration="1767000" />
+      <workItem from="1765875152172" duration="486000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <option name="closed" value="true" />
@@ -110,7 +112,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765874077984</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="97">
+      <option name="closed" value="true" />
+      <created>1765875231816</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1765875231816</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -120,6 +130,7 @@
     <MESSAGE value="第一次提交" />
     <MESSAGE value="第二次提交" />
     <MESSAGE value="第三次提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="第三次提交" />
+    <MESSAGE value="97" />
+    <option name="LAST_COMMIT_MESSAGE" value="97" />
   </component>
 </project>
