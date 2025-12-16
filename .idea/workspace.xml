@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="第一次提交">
-      <change beforePath="$PROJECT_DIR$/.idea/ZWU_TS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ZWU_TS.iml" afterDir="false" />
+    <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="第三次提交">
+      <change afterPath="$PROJECT_DIR$/test1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
@@ -50,7 +50,6 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "D:/ZWU_TS",
     "node.js.detected.package.eslint": "true",
@@ -77,7 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1765871087600</updated>
       <workItem from="1765871088621" duration="1000" />
-      <workItem from="1765872685089" duration="838000" />
+      <workItem from="1765872685089" duration="1767000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <option name="closed" value="true" />
@@ -95,7 +94,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765873177641</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="第二次提交">
+      <option name="closed" value="true" />
+      <created>1765873798890</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1765873798890</updated>
+    </task>
+    <task id="LOCAL-00004" summary="第三次提交">
+      <option name="closed" value="true" />
+      <created>1765874077984</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1765874077984</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -103,6 +118,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="第一次提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="第一次提交" />
+    <MESSAGE value="第二次提交" />
+    <MESSAGE value="第三次提交" />
+    <option name="LAST_COMMIT_MESSAGE" value="第三次提交" />
   </component>
 </project>
