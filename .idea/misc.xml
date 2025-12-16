@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="pzm" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="pzm" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="qwen3vl" project-jdk-type="Python SDK" />
 </project>
