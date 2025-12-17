@@ -89,10 +89,29 @@ class Exp_Informer(Exp_Basic):
         # X = batch_x: encoder 输入窗口 [B, seq_len, n_features]
         # Y = batch_y: decoder 输入+预测窗口 [B, label_len+pred_len, n_features]
         batch_x0, batch_y0, batch_x_mark0, batch_y_mark0 = next(iter(train_loader))
-        print(f"[shape] train batch_x (X) = {tuple(batch_x0.shape)}  # 切分好的 X")
-        print(f"[shape] train batch_y (Y) = {tuple(batch_y0.shape)}  # label_len+pred_len")
-        print(f"[shape] train batch_x_mark = {tuple(batch_x_mark0.shape)}")
-        print(f"[shape] train batch_y_mark = {tuple(batch_y_mark0.shape)}")
+        # print(f"[shape] 第一批数据形状：X={tuple(batch_x0.shape)} Y={tuple(batch_y0.shape)} X_mark={tuple(batch_x_mark0.shape)} Y_mark={tuple(batch_y_mark0.shape)}")
+
+        x0 = batch_x0
+        if self.args.corr_n_vars and self.args.corr_n_vars > 0:
+            x0 = x0[:, :, : self.args.corr_n_vars]
+        bsz, seq_len, n_vars = x0.shape
+        if var_names is None:
+            var_names_out = [f"v{i}" for i in range(n_vars)]
+        else:
+            var_names_out = list(var_names)[:n_vars]
+
+        mean_bt = x0.mean(dim=1).detach().cpu()  # [B, C] over T
+        var_bt = x0.var(dim=1, unbiased=False).detach().cpu()  # [B, C] over T
+
+        # print(f"[stat] 第一批数据(标准化后)：样本数={bsz} 时间点数T={seq_len} 变量数={n_vars}")
+        # for sample_idx in range(bsz):
+        #     for var_idx in range(n_vars):
+        #         vname = var_names_out[var_idx]
+        #         m = float(mean_bt[sample_idx, var_idx].item())
+        #         v = float(var_bt[sample_idx, var_idx].item())
+        #         print(f"[stat] 第{sample_idx+1}个样本的第{var_idx+1}个变量是{vname}，均值={m:.6f}，方差={v:.6f}")
+        patches0 = x0.unfold(dimension=1, size=self.args.patch_size, step=self.args.patch_stride)
+        print(f"[shape] train batch_x patches = {tuple(patches0.shape)}  # [B, n_patches, patch_len, n_vars]")
 
         criterion = nn.MSELoss()
         model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)

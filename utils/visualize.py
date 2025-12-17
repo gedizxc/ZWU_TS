@@ -237,15 +237,13 @@ def export_batch_patch_correlation_videos(
             assert proc.stdin is not None
             for frame in frames:
                 proc.stdin.write(frame.astype(np.uint8, copy=False).tobytes())
+
             proc.stdin.close()
+            proc.stdin = None  # 关键：防止 communicate() flush 已关闭的 stdin
             _, err = proc.communicate()
         finally:
             if proc.poll() is None:
                 proc.kill()
-
-        if proc.returncode != 0:
-            raise RuntimeError(f"ffmpeg failed (returncode={proc.returncode}): {err.decode(errors='ignore')}")
-
     for i in range(bsz):
         frames: list[np.ndarray] = []
         x = batch_x[i]

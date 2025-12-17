@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="视频+文本+图片第一次">
+    <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="视频+文本+图片第二次">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exp/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generate_correlations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/legacy/data7-all.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/legacy/data96-all.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/patch_video_generator.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tokenize_stats.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tokenize_stats_qwen.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/exp/exp_informer.py" beforeDir="false" afterPath="$PROJECT_DIR$/exp/exp_informer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/visualize.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/visualize.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,32 +44,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.generate_correlations.executor&quot;: &quot;Run&quot;,
-    &quot;Python.patch_video_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.tokenize_stats.executor&quot;: &quot;Run&quot;,
-    &quot;Python.tokenize_stats_qwen.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/ZWU_TS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.generate_correlations.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.patch_video_generator.executor": "Run",
+    "Python.tokenize_stats.executor": "Run",
+    "Python.tokenize_stats_qwen.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/ZWU_TS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\ZWU_TS" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.patch_video_generator">
+  <component name="RunManager" selected="Python.main">
     <configuration name="generate_correlations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ZWU_TS" />
       <option name="ENV_FILES" value="" />
@@ -93,6 +86,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/generate_correlations.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ZWU_TS" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -172,6 +188,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.patch_video_generator" />
         <item itemvalue="Python.tokenize_stats_qwen" />
         <item itemvalue="Python.tokenize_stats" />
@@ -197,7 +214,8 @@
       <workItem from="1765871088621" duration="1000" />
       <workItem from="1765872685089" duration="1767000" />
       <workItem from="1765934872978" duration="50000" />
-      <workItem from="1765945955955" duration="5533000" />
+      <workItem from="1765945955955" duration="6015000" />
+      <workItem from="1765957455549" duration="5562000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <option name="closed" value="true" />
@@ -255,7 +273,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765886636076</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="视频+文本+图片第一次">
+      <option name="closed" value="true" />
+      <created>1765951641054</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1765951641054</updated>
+    </task>
+    <task id="LOCAL-00009" summary="视频+文本+图片第二次">
+      <option name="closed" value="true" />
+      <created>1765951704322</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1765951704322</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,9 +300,11 @@
     <MESSAGE value="第二次提交" />
     <MESSAGE value="第三次提交" />
     <MESSAGE value="视频+文本+图片第一次" />
-    <option name="LAST_COMMIT_MESSAGE" value="视频+文本+图片第一次" />
+    <MESSAGE value="视频+文本+图片第二次" />
+    <option name="LAST_COMMIT_MESSAGE" value="视频+文本+图片第二次" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ZWU_TS$main.coverage" NAME="main 覆盖结果" MODIFIED="1765963026459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ZWU_TS$patch_video_generator.coverage" NAME="patch_video_generator 覆盖结果" MODIFIED="1765886053965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ZWU_TS$generate_correlations.coverage" NAME="generate_correlations 覆盖结果" MODIFIED="1765882977384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ZWU_TS$tokenize_stats_qwen.coverage" NAME="tokenize_stats_qwen 覆盖结果" MODIFIED="1765884158143" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
