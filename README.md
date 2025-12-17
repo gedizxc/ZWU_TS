@@ -1,64 +1,80 @@
-# ZWU_TS Informer-Style Layout
+# ZWU_TS (Informer2020-style project layout)
+
+This repo is refactored to follow the **Informer2020** project structure and data split style.
+Dataset remains `data/ETTh1.csv` (ETTh1 hourly).
 
 ```
 data/
   ETTh1.csv
-src/
-  generate_correlations.py      # merged 3x2 correlation generator
-  tokenize_stats.py             # turn batch_stats.txt into tokens/ids
-  legacy/                       # previous standalone scripts kept for reference
-configs/
-models/
-utils/
+data_provider/
+  data_loader.py          # Dataset_ETT_hour (Informer split)
+  data_factory.py         # build Dataset + DataLoader
 exp/
-scripts/
-logs/
-checkpoints/
-results/
+  exp_basic.py
+  exp_informer.py         # training/test loop (Informer style)
+models/
+  model.py                # SimpleInformer (lightweight)
+utils/
+  timefeatures.py         # time features (Informer style)
+  visualize.py            # per-batch image/video exporters
+main.py                   # argparse entry (Informer style)
 artifacts/
-  correlations/                 # combined correlation figures + stats/tokens
+  batch_visuals/          # generated outputs (images/videos)
 ```
 
-## Dependencies
-Python 3 with `numpy`, `pandas`, `seaborn`, `matplotlib`, `tqdm`.
+## Requirements
+- Python 3.9+
+- `numpy`, `pandas`
+- `torch`
+- For images: `matplotlib`
+- For videos: `imageio[ffmpeg]` (or another ffmpeg-backed backend)
 
-## Generate Correlation Images + Stats
+## Run (96 -> 96, batch_size=32)
 ```bash
-python src/generate_correlations.py
+python run.py --is_training 1 --batch_size 32 --seq_len 96 --pred_len 96
 ```
-Reads `data/ETTh1.csv`, splits into 96-step batches, and writes 3x2 images plus `batch_stats.txt` to `artifacts/correlations/`.
-Note: If you run from another working directory, the script will try both `./data/ETTh1.csv` and `<repo>/data/ETTh1.csv`. Ensure the dataset stays under `data/`.
-
-## Tokenize Stats for Text+Image Pairing (e.g., Qwen3-VL inputs)
-After stats exist:
+If you are using the conda env `qwen3vl`:
 ```bash
-python src/tokenize_stats.py
+conda run -n qwen3vl python -u run.py --is_training 1 --batch_size 32 --seq_len 96 --pred_len 96
 ```
-Outputs:
-- `artifacts/correlations/vocab.json` (token -> id mapping with specials `<pad>=0,<unk>=1,<bos>=2,<eos>=3`)
-- `artifacts/correlations/batch_stats_tokens.jsonl` (per batch: tokens + ids)
+At startup it prints dataset split shapes:
+- `batch_x (X)` is the **split encoder input** `[B, seq_len, n_features]`
+- `batch_y (Y)` is `[B, label_len+pred_len, n_features]`
 
-You can then pair each `batch_{i}.png` image with the corresponding JSONL row (matching `batch` index) to feed into text+image models. If you need a different tokenizer, swap `tokenize_line` in `src/tokenize_stats.py` or replace with your model’s tokenizer before vectorization.
+## Per-batch images / videos (gated)
+During training, each batch can export:
+- `artifacts/batch_visuals/<setting>/images/batch_0000/` -> **32 PNGs** (每张是 2x3 相关性热力图)
+- `artifacts/batch_visuals/<setting>/videos/batch_0000/` -> **32 个 `.mp4` 视频文件** (需要 ffmpeg)
 
-## Tokenize with Qwen3 Tokenizer (preferred for Qwen/Qwen3-VL-2B-Instruct)
-Requires `transformers` and access to the model weights (local cache or network):
+To avoid huge runtime, exporting is gated by these args (default: only first batch):
 ```bash
-python src/tokenize_stats_qwen.py
+python run.py --gen_images_batches 1 --gen_videos_batches 1
 ```
-Outputs:
-- `artifacts/correlations/vocab_qwen.json` (Qwen tokenizer vocab)
-- `artifacts/correlations/batch_stats_qwen.jsonl` (per batch: text, tokens, ids)
+Patch video params follow your request:
+- `--patch_size 24 --patch_stride 12`
+MP4 encoding uses ffmpeg:
+- Default `--ffmpeg_path auto`: uses bundled ffmpeg from `imageio-ffmpeg` (recommended in conda envs)
+- If `ffmpeg` is on PATH: set `--ffmpeg_path ffmpeg`
+- If not (common on Windows): pass full path, e.g. `--ffmpeg_path "D:\\ffmpeg\\bin\\ffmpeg.exe"`
 
-Notes:
-- Model ID used: `Qwen/Qwen3-VL-2B-Instruct` (loads with `AutoTokenizer.from_pretrained(..., trust_remote_code=True)`).
-- Ensure the model/tokenizer is available locally or that your environment can download it once.
+Correlation heatmap definition (per sample):
+- Top row (var-var, CxC): DTW / Covariance / Pearson; `C` is inferred from dataset (ETTh1 -> 7)
+- Bottom row (time-time, TxT): DTW / Covariance / Pearson; `T = seq_len` (default 96)
+Axes:
+- var-var panels: x/y ticks are **feature names** from the dataset columns (excluding `date`)
+- time-time panels: x/y ticks are **time indices** within the encoder window `[0..seq_len-1]`
 
-## Patch-based Frames/Videos (PatchTST style) for Qwen Video Input
-Generate patch videos (patch_size=24, stride=12) over past 96 steps (future 96 kept as target span):
+Optional: limit how many variables participate in correlation plots (uses the first N vars):
 ```bash
-python src/patch_video_generator.py
+python run.py --corr_n_vars 7
 ```
-Outputs under `artifacts/patch_videos/`:
-- `batch_{i}.mp4` (requires `imageio.v3` + codec, install with `pip install imageio[ffmpeg]`)
 
-Frames are kept in-memory (no PNG files). Default caps to `MAX_SAMPLES=5` to avoid huge outputs. Adjust inside `src/patch_video_generator.py` if you want all samples or different patch params.
+## Informer-style scripts
+Linux/macOS:
+```bash
+bash scripts/ETTh1.sh
+```
+Windows PowerShell:
+```powershell
+.\scripts\ETTh1.ps1
+```
