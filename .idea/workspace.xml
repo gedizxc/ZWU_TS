@@ -6,22 +6,31 @@
   <component name="ChangeListManager">
     <list default="true" id="99d6d31b-b5aa-4b11-b432-3aae6063f7b4" name="更改" comment="视频+文本+图片第三次">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_provider/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_provider/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_provider/data_factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_provider/data_factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_provider/data_loader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/exp/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/exp/exp_basic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/exp/exp_informer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoints/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/data_factory.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/dataset.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/heatmap.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/loader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/patch.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/preprocess.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/windows.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qwen/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qwen/token_stats.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qwen/vector_export.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/.gitkeep" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ETTh1.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ETTh1.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ETTh1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ETTh1.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/timefeatures.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/visualize.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ETTh1.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ETTh1.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +88,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/ZWU_TS/test",
+    "last_opened_file_path": "D:/ZWU_TS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -90,11 +99,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\ZWU_TS\test" />
       <recent name="D:\ZWU_TS" />
+      <recent name="D:\ZWU_TS\test" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.test (1)">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ZWU_TS" />
       <option name="ENV_FILES" value="" />
@@ -118,29 +127,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="modeling_qwen3_vl" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ZWU_TS" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="F:/anaconda/envs/qwen3vl/Lib/site-packages/transformers/models/qwen3_vl" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="F:/anaconda/envs/qwen3vl/Lib/site-packages/transformers/models/qwen3_vl/modeling_qwen3_vl.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="run_inference_qwen3vl" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ZWU_TS" />
       <option name="ENV_FILES" value="" />
@@ -156,6 +142,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/run_inference_qwen3vl.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ZWU_TS" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -212,11 +221,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
+        <item itemvalue="Python.test (1)" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.test1suoxiao" />
         <item itemvalue="Python.run_inference_qwen3vl" />
-        <item itemvalue="Python.modeling_qwen3_vl" />
       </list>
     </recent_temporary>
   </component>
@@ -249,6 +258,9 @@
       <workItem from="1766403233539" duration="5880000" />
       <workItem from="1766449949596" duration="18684000" />
       <workItem from="1766537031114" duration="25418000" />
+      <workItem from="1766708812639" duration="8596000" />
+      <workItem from="1766895728954" duration="370000" />
+      <workItem from="1766993101141" duration="7555000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <option name="closed" value="true" />
@@ -372,15 +384,15 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ZWU_TS$check_patch_size.coverage" NAME="check_patch_size 覆盖结果" MODIFIED="1766479037939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/ZWU_TS$modeling_qwen3_vl.coverage" NAME="modeling_qwen3_vl 覆盖结果" MODIFIED="1766556212596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="F:/anaconda/envs/qwen3vl/Lib/site-packages/transformers/models/qwen3_vl" />
+    <SUITE FILE_PATH="coverage/ZWU_TS$check_patch_size.coverage" NAME="check_patch_size 覆盖结果" MODIFIED="1766479037939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/ZWU_TS$run.coverage" NAME="run 覆盖结果" MODIFIED="1766409102373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ZWU_TS$run_inference_qwen3vl.coverage" NAME="run_inference_qwen3vl 覆盖结果" MODIFIED="1766558567429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/ZWU_TS$generate_correlations.coverage" NAME="generate_correlations 覆盖结果" MODIFIED="1765882977384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ZWU_TS$tokenize_stats_qwen.coverage" NAME="tokenize_stats_qwen 覆盖结果" MODIFIED="1765884158143" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ZWU_TS$test.coverage" NAME="test 覆盖结果" MODIFIED="1766572415328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/ZWU_TS$debugqw.coverage" NAME="debugqw 覆盖结果" MODIFIED="1766394132009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/ZWU_TS$main.coverage" NAME="main 覆盖结果" MODIFIED="1766572303543" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ZWU_TS$main.coverage" NAME="main 覆盖结果" MODIFIED="1767000374373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ZWU_TS$patch_video_generator.coverage" NAME="patch_video_generator 覆盖结果" MODIFIED="1765886053965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ZWU_TS$test1suoxiao.coverage" NAME="test1suoxiao 覆盖结果" MODIFIED="1766559851050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/ZWU_TS$tokenize_stats.coverage" NAME="tokenize_stats 覆盖结果" MODIFIED="1765883389089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />

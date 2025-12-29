@@ -1,33 +1,21 @@
-ZWU_TS (Informer-style prep for Qwen3-VL)
-=========================================
+## 项目说明
 
-This project now mirrors Informer naming and data flow: read ETTh-style CSVs, split into train/val/test windows shaped `[32, 96, 7]`, export visuals (images/videos), concise text prompt, and serialize the split time series. The generated assets are then summarized with Qwen3-VL token counts so you know the token×vector matrix size for each modality.
+重构为模块化管线：读取 ETTh1，标准化滑窗，PatchTST 风格 patchify，经 MLP 得到 TS embeddings；同时生成 DTW/Cov/Pearson 热力图（图片 + 视频帧），用本地 Qwen3-VL 编码图像/视频及文本提示，默认仅处理首个 batch。
 
-What it produces
-- Time series: `artifacts/prepared/{train,val,test}/batch_xxxx/encoder.npy` (encoder windows) plus decoder/mark arrays.
-- Visuals: correlation heatmap PNGs (wide+RGB) and MP4s per batch, enlarged by 32× for clearer patches.
-- Text: compact prompt in `artifacts/prepared/text/prompt.txt` and stats.json.
-- Token report: `artifacts/prepared/text/token_report.json` with `{tokens, dim, matrix}` for prompt, time series, images, videos (based on local Qwen3-VL).
+## 目录结构（核心）
 
-Running
-```bash
-python main.py \
-  --root_path data \
-  --data_path ETTh1.csv \
-  --seq_len 96 \
-  --label_len 48 \
-  --pred_len 96 \
-  --batch_size 32 \
-  --patch_len 16 \
-  --max_batches 1 \
-  --heatmap_mode both \
-  --save_videos \
-  --patch_scale 32 \
-  --qwen_model_dir Qwen3-VL-2B-Instruct
-```
+- `main.py`：入口，设定环境变量、播种、运行批处理管线。
+- `configs/paths.py`：数据/输出/模型路径；`configs/hparams.py`：超参和设备。
+- `data_provider/`：`dataset_etth1.py`（CSV 读取、标准化、Dataset/DataLoader），`scaler.py`。
+- `processing/`：`patchify.py`，`stats.py`（DTW/Cov/Pearson + 归一化），`render.py`（7x21 渲染）。
+- `models/`：`ts_mlp.py`（16→2048 MLP），`qwen_encoders.py`（图像/视频/文本编码封装）。
+- `pipelines/`：`batch_pipeline.py`（总体流程），`batch_steps.py`（5.1~5.5 分步函数）。
+- `utils/`：`seed.py`，`io.py`，`logging.py`。
+- 数据与模型：`data/ETTh1.csv`，`Qwen3-VL-2B-Instruct/`。
 
-Notes
-- Data split ratios: 70% train / 10% val / 20% test by default; stride defaults to `seq_len` for non-overlapping windows.
-- Normalization: z-score per channel then min-max per channel across the full dataset; prompt text stops at the global min/max/mean/var line as requested.
-- Patch/visuals: patch length 16; correlation blocks are enlarged 32× when saving images/videos.
-- Qwen token counting uses the local checkpoint (no network). Time series are serialized to text before tokenization; video tokens are counted via `imageio` + processor grid metadata. If counting fails, a warning is printed and the pipeline still saves assets.
+## 使用方法
+
+1) 环境：已安装 `torch`、`transformers`，本地有 `Qwen3-VL-2B-Instruct/`，数据在 `data/ETTh1.csv`。  
+2) 运行首批：`python main.py`。  
+3) 若需处理所有 batch：在 `pipelines/batch_pipeline.py` 末尾删除首个循环内的 `break`。  
+4) 产物：`first_batch_artifacts/` 下保存 TS/embed、图像、视频帧及 vision/text embeddings。
