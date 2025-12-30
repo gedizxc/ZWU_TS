@@ -22,12 +22,12 @@ def encode_images_qwen3vl(
     images: List[Image.Image],
     device: str,
     micro_bs: int = 8,
-) -> Tuple[List[torch.Tensor], torch.Tensor]:
+) -> Tuple[List[torch.Tensor], dict]:
     print("Encode IMAGES with Qwen3-VL vision encoder")
     model.eval()
 
     all_token_seqs = []
-    pooled = []
+    meta = {}
 
     with torch.inference_mode():
         for start in range(0, len(images), micro_bs):
@@ -55,9 +55,10 @@ def encode_images_qwen3vl(
             if pixel_values is None or image_grid_thw is None:
                 raise RuntimeError(f"processor did not return pixel_values/image_grid_thw. got keys={keys}")
 
-            if start == 0:
-                print(f"[Vision][Image] pixel_values shape={tuple(pixel_values.shape)} dtype={pixel_values.dtype}")
-                print(f"[Vision][Image] image_grid_thw shape={tuple(image_grid_thw.shape)} value={image_grid_thw}")
+            if start == 0 and "grid_thw" not in meta:
+                grid = image_grid_thw[0].tolist() if image_grid_thw.ndim == 2 else image_grid_thw.tolist()
+                meta["grid_thw"] = tuple(int(v) for v in grid)
+                meta["tokens_in"] = int(grid[0] * grid[1] * grid[2])
 
             pixel_values = pixel_values.to(device)
             image_grid_thw = image_grid_thw.to(device)
@@ -70,11 +71,10 @@ def encode_images_qwen3vl(
             for feats in img_feats_list:
                 all_token_seqs.append(feats.detach().cpu())
 
-            pooled.append(torch.stack([feats.mean(dim=0) for feats in img_feats_list], dim=0).cpu())
-
-    pooled = torch.cat(pooled, dim=0)
-    print(f"[Vision][Image] pooled shape={tuple(pooled.shape)}")
-    return all_token_seqs, pooled
+            if "tokens_out" not in meta and img_feats_list:
+                meta["tokens_out"] = int(img_feats_list[0].shape[0])
+                meta["embed_dim"] = int(img_feats_list[0].shape[1])
+    return all_token_seqs, meta
 
 
 def encode_videos_qwen3vl(
@@ -83,12 +83,12 @@ def encode_videos_qwen3vl(
     videos: List[List[Image.Image]],
     device: str,
     micro_bs: int = 2,
-) -> Tuple[List[torch.Tensor], torch.Tensor]:
+) -> Tuple[List[torch.Tensor], dict]:
     print("Encode VIDEOS with Qwen3-VL vision encoder")
     model.eval()
 
     all_token_seqs = []
-    pooled = []
+    meta = {}
 
     with torch.inference_mode():
         for start in range(0, len(videos), micro_bs):
@@ -111,9 +111,10 @@ def encode_videos_qwen3vl(
             if pixel_values_videos is None or video_grid_thw is None:
                 raise RuntimeError(f"processor did not return pixel_values_videos/video_grid_thw. got keys={keys}")
 
-            if start == 0:
-                print(f"[Vision][Video] pixel_values_videos shape={tuple(pixel_values_videos.shape)} dtype={pixel_values_videos.dtype}")
-                print(f"[Vision][Video] video_grid_thw shape={tuple(video_grid_thw.shape)} value={video_grid_thw}")
+            if start == 0 and "grid_thw" not in meta:
+                grid = video_grid_thw[0].tolist() if video_grid_thw.ndim == 2 else video_grid_thw.tolist()
+                meta["grid_thw"] = tuple(int(v) for v in grid)
+                meta["tokens_in"] = int(grid[0] * grid[1] * grid[2])
 
             pixel_values_videos = pixel_values_videos.to(device)
             video_grid_thw = video_grid_thw.to(device)
@@ -126,11 +127,10 @@ def encode_videos_qwen3vl(
             for feats in vid_feats_list:
                 all_token_seqs.append(feats.detach().cpu())
 
-            pooled.append(torch.stack([feats.mean(dim=0) for feats in vid_feats_list], dim=0).cpu())
-
-    pooled = torch.cat(pooled, dim=0)
-    print(f"[Vision][Video] pooled shape={tuple(pooled.shape)}")
-    return all_token_seqs, pooled
+            if "tokens_out" not in meta and vid_feats_list:
+                meta["tokens_out"] = int(vid_feats_list[0].shape[0])
+                meta["embed_dim"] = int(vid_feats_list[0].shape[1])
+    return all_token_seqs, meta
 
 
 def encode_text_global(model, processor, prompt: str, device: str):
@@ -153,13 +153,4 @@ def encode_text_global(model, processor, prompt: str, device: str):
         emb_layer = model.model.get_input_embeddings()
         token_embeds = emb_layer(input_ids)
         print(f"[Text] token_embeds shape={tuple(token_embeds.shape)} dtype={token_embeds.dtype} device={token_embeds.device}")
-
-        if attn_mask is None:
-            pooled = token_embeds.mean(dim=1).squeeze(0)
-        else:
-            m = attn_mask.float().unsqueeze(-1)
-            pooled = (token_embeds * m).sum(dim=1) / (m.sum(dim=1).clamp_min(1.0))
-            pooled = pooled.squeeze(0)
-
-    print(f"[Text] pooled shape={tuple(pooled.shape)}")
-    return token_embeds.detach().cpu(), pooled.detach().cpu()
+    return token_embeds.detach().cpu()

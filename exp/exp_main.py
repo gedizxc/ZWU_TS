@@ -85,11 +85,12 @@ class Exp_Main(Exp_Basic):
         ts_embeds_cpu = ts_embeds.detach().cpu()
         torch.save({"ts_embeds": ts_embeds_cpu}, os.path.join(self.args.output_dir, "first_batch_ts_embeds.pt"))
         print(f"[Save] ts_embeds -> {os.path.join(self.args.output_dir, 'first_batch_ts_embeds.pt')}")
-        return ts_embeds_cpu
+        return tuple(ts_tokens.shape), ts_embeds_cpu
 
     def _build_image_modality(self, x_np, batch_size):
         print_box(f"4.2) Image modality: compute {self.args.num_vars}x{self.args.num_vars} grid -> render -> save")
         images = []
+        meta = {}
         for i in range(batch_size):
             window = x_np[i]
             dtw, cov, pear = compute_three_mats(
@@ -107,17 +108,16 @@ class Exp_Main(Exp_Basic):
                 cov_clip_hi=self.args.cov_clip_hi,
                 dtw_tau=self.args.dtw_tau,
             )
-            if i == 0:
-                print(f"[Img sample{i}] grid shape={grid.shape} range=({grid.min():.3f},{grid.max():.3f})")
             img = render_rgb_grid_to_image(grid, cell_pix=self.cell_pix)
             if i == 0:
-                print(f"[Img sample{i}] rendered size={img.size} (W,H) mode={img.mode}")
+                meta["grid_shape"] = tuple(grid.shape)
+                meta["render_size"] = tuple(img.size)
             images.append(img)
 
             img_path = os.path.join(self.args.output_dir, "images", f"batch0_sample{i:02d}_heatmap.png")
             img.save(img_path)
         print(f"[Save] images saved to {os.path.join(self.args.output_dir, 'images')} count={len(images)}")
-        return images
+        return images, meta
 
     def _build_video_modality(self, x_np, batch_size, num_patches):
         print_box(
@@ -130,6 +130,7 @@ class Exp_Main(Exp_Basic):
             )
 
         videos = []
+        meta = {}
         for i in range(batch_size):
             window = x_np[i]
             frames = []
@@ -160,10 +161,10 @@ class Exp_Main(Exp_Basic):
                 frames_out.append(f.copy())
             frames_out = frames_out[:self.args.video_frames]
             if i == 0:
-                print(
-                    f"[Vid sample{i}] frames raw={len(frames)} duplicated={len(frames_out)} "
-                    f"frame_size={frames_out[0].size}"
-                )
+                meta["grid_shape"] = tuple(grid.shape)
+                meta["frame_size"] = tuple(frames_out[0].size)
+                meta["frames_raw"] = len(frames)
+                meta["frames_out"] = len(frames_out)
 
             vid_dir = os.path.join(self.args.output_dir, "videos", f"batch0_sample{i:02d}")
             ensure_dir(vid_dir)
@@ -174,18 +175,18 @@ class Exp_Main(Exp_Basic):
             videos.append(frames_out)
 
         print(f"[Save] video frames saved to {os.path.join(self.args.output_dir, 'videos')} videos={len(videos)}")
-        return videos
+        return videos, meta
 
     def _encode_vision_modalities(self, images, videos):
         print_box("4.4) Qwen3-VL Vision encoding: images -> img_embeds, videos -> vid_embeds")
-        img_token_seqs, img_pooled = encode_images_qwen3vl(
+        img_token_seqs, img_meta = encode_images_qwen3vl(
             model=self.model,
             processor=self.processor,
             images=images,
             device=str(self.model.device),
             micro_bs=self.args.vision_mb,
         )
-        vid_token_seqs, vid_pooled = encode_videos_qwen3vl(
+        vid_token_seqs, vid_meta = encode_videos_qwen3vl(
             model=self.model,
             processor=self.processor,
             videos=videos,
@@ -193,41 +194,117 @@ class Exp_Main(Exp_Basic):
             micro_bs=max(1, self.args.vision_mb // 4),
         )
 
+        if not img_token_seqs or not vid_token_seqs:
+            raise RuntimeError("empty vision token sequences; check input images/videos")
+
+        img_tokens_flat = torch.cat(img_token_seqs, dim=0)
+        vid_tokens_flat = torch.cat(vid_token_seqs, dim=0)
+
         save_path = os.path.join(self.args.output_dir, "first_batch_vision_embeds.pt")
         torch.save(
             {
-                "img_token_seqs": img_token_seqs,
-                "img_pooled": img_pooled,
-                "vid_token_seqs": vid_token_seqs,
-                "vid_pooled": vid_pooled,
+                "img_tokens": img_tokens_flat,
+                "vid_tokens": vid_tokens_flat,
             },
             save_path,
         )
         print(f"[Save] vision embeddings -> {save_path}")
-        return img_token_seqs, img_pooled, vid_token_seqs, vid_pooled
+        return img_token_seqs, vid_token_seqs, img_tokens_flat, vid_tokens_flat, img_meta, vid_meta
 
-    def _print_summary(self, ts_embeds_cpu, img_pooled, vid_pooled, txt_token_embeds, txt_pooled):
+    def _summarize_token_list(self, token_seqs):
+        if not token_seqs:
+            return "empty", 0, 0, "0"
+
+        bsz = len(token_seqs)
+        first_shape = tuple(token_seqs[0].shape)
+        embed_dim = int(first_shape[-1])
+        total_tokens = sum(int(t.shape[0]) for t in token_seqs)
+
+        same_shape = all(tuple(t.shape) == first_shape for t in token_seqs)
+        if same_shape and len(first_shape) == 2:
+            tokens_per = int(first_shape[0])
+            seq_shape = (bsz, tokens_per, int(first_shape[1]))
+            tokens_range = str(tokens_per)
+        else:
+            min_tokens = min(int(t.shape[0]) for t in token_seqs)
+            max_tokens = max(int(t.shape[0]) for t in token_seqs)
+            if min_tokens == max_tokens:
+                seq_shape = (bsz, min_tokens, embed_dim)
+                tokens_range = str(min_tokens)
+            else:
+                seq_shape = f"list[{bsz}]({min_tokens}..{max_tokens},{embed_dim})"
+                tokens_range = f"{min_tokens}..{max_tokens}"
+
+        return seq_shape, total_tokens, embed_dim, tokens_range
+
+    def _print_summary(
+        self,
+        x_shape,
+        num_patches,
+        ts_tokens_shape,
+        ts_embeds_shape,
+        img_token_seqs,
+        vid_token_seqs,
+        txt_token_embeds,
+        img_meta,
+        vid_meta,
+    ):
         print_box("4.5) SUMMARY (to embeddings only)")
-        print(f"[Summary] ts_embeds: {tuple(ts_embeds_cpu.shape)}  (B,42,2048)")
-        print(f"[Summary] img_pooled: {tuple(img_pooled.shape)}  (B,2048)")
-        print(f"[Summary] vid_pooled: {tuple(vid_pooled.shape)}  (B,2048)")
-        print(f"[Summary] txt_token_embeds: {tuple(txt_token_embeds.shape)}  (1,L,2048)")
-        print(f"[Summary] txt_pooled: {tuple(txt_pooled.shape)}  (2048,)")
 
-    def _process_batch(self, batch_idx, x, y, ts_mlp, expected_tokens, num_patches, txt_token_embeds, txt_pooled):
+        bsz, seq_len, num_vars = x_shape
+        patch_view_shape = (bsz, num_vars, num_patches, self.args.patch_len)
+        ts_flat_shape = (bsz * ts_embeds_shape[1], ts_embeds_shape[2])
+        ts_chain = f"{x_shape}->{patch_view_shape}->{ts_tokens_shape}->{ts_embeds_shape}->{ts_flat_shape}"
+        print(f"[Summary] ts_embeds: {ts_chain}")
+
+        img_seq_shape, img_total, img_dim, img_tokens_out = self._summarize_token_list(img_token_seqs)
+        img_chain = (
+            f"grid{img_meta.get('grid_shape')}->render{img_meta.get('render_size')}"
+            f"->grid_thw{img_meta.get('grid_thw')}/in={img_meta.get('tokens_in')}"
+            f"->out={img_tokens_out},{img_dim}->{img_seq_shape}->{(img_total, img_dim)}"
+        )
+        print(f"[Summary] img_embeds: {img_chain}")
+
+        vid_seq_shape, vid_total, vid_dim, vid_tokens_out = self._summarize_token_list(vid_token_seqs)
+        vid_chain = (
+            f"grid{vid_meta.get('grid_shape')}->render{vid_meta.get('frame_size')}"
+            f"->frames={vid_meta.get('frames_raw')}->{vid_meta.get('frames_out')}"
+            f"->grid_thw{vid_meta.get('grid_thw')}/in={vid_meta.get('tokens_in')}"
+            f"->out={vid_tokens_out},{vid_dim}->{vid_seq_shape}->{(vid_total, vid_dim)}"
+        )
+        print(f"[Summary] vid_embeds: {vid_chain}")
+
+        txt_tokens = int(txt_token_embeds.shape[1])
+        txt_dim = int(txt_token_embeds.shape[2])
+        txt_chain = f"{tuple(txt_token_embeds.shape)}->{(txt_tokens, txt_dim)}"
+        print(f"[Summary] prompt_embeds: {txt_chain}")
+
+    def _process_batch(self, batch_idx, x, y, ts_mlp, expected_tokens, num_patches, txt_token_embeds):
         t0 = time.time()
         print_box(f"Batch {batch_idx} start")
         print(f"[Batch] x shape={tuple(x.shape)} y shape={tuple(y.shape)} dtype={x.dtype}")
         batch_size = x.shape[0]
 
-        ts_embeds_cpu = self._encode_ts_embeddings(x, ts_mlp, expected_tokens)
+        ts_tokens_shape, ts_embeds_cpu = self._encode_ts_embeddings(x, ts_mlp, expected_tokens)
 
         x_np = x.numpy()
-        images = self._build_image_modality(x_np, batch_size)
-        videos = self._build_video_modality(x_np, batch_size, num_patches)
+        images, img_meta = self._build_image_modality(x_np, batch_size)
+        videos, vid_meta = self._build_video_modality(x_np, batch_size, num_patches)
 
-        _, img_pooled, _, vid_pooled = self._encode_vision_modalities(images, videos)
-        self._print_summary(ts_embeds_cpu, img_pooled, vid_pooled, txt_token_embeds, txt_pooled)
+        img_token_seqs, vid_token_seqs, img_tokens_flat, vid_tokens_flat, img_enc_meta, vid_enc_meta = self._encode_vision_modalities(images, videos)
+        img_meta.update(img_enc_meta)
+        vid_meta.update(vid_enc_meta)
+        self._print_summary(
+            tuple(x.shape),
+            num_patches,
+            ts_tokens_shape,
+            tuple(ts_embeds_cpu.shape),
+            img_token_seqs,
+            vid_token_seqs,
+            txt_token_embeds,
+            img_meta,
+            vid_meta,
+        )
 
         print(f"[Time] batch0 done in {time.time() - t0:.2f}s")
         print("[NOTE] processed first batch only; remove the break to process all batches.")
@@ -254,14 +331,14 @@ class Exp_Main(Exp_Basic):
             f"heatmap image (DTW|Cov|Pearson), and a {self.args.video_frames}-frame video of patch-wise heatmaps.\n"
             "Encode modalities into embeddings for fusion."
         )
-        txt_token_embeds, txt_pooled = encode_text_global(
+        txt_token_embeds = encode_text_global(
             self.model,
             self.processor,
             global_prompt,
             device=str(self.model.device),
         )
         torch.save(
-            {"text_token_embeds": txt_token_embeds, "text_pooled": txt_pooled, "prompt": global_prompt},
+            {"text_token_embeds": txt_token_embeds, "prompt": global_prompt},
             os.path.join(self.args.output_dir, "global_text_embeddings.pt"),
         )
         print(f"[Save] global text embeddings -> {os.path.join(self.args.output_dir, 'global_text_embeddings.pt')}")
@@ -279,6 +356,5 @@ class Exp_Main(Exp_Basic):
                 expected_tokens,
                 num_patches,
                 txt_token_embeds,
-                txt_pooled,
             )
             break
