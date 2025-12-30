@@ -1,8 +1,7 @@
 import math
-import numpy as np
 from typing import Tuple
 
-from configs import hparams
+import numpy as np
 
 
 def z_norm_1d(a: np.ndarray, eps: float = 1e-8) -> np.ndarray:
@@ -27,11 +26,19 @@ def dtw_distance_banded(a: np.ndarray, b: np.ndarray, band: int = 8) -> float:
     return float(math.sqrt(dp[T, T]))
 
 
-def compute_three_mats(window: np.ndarray,
-                       kind: str,
-                       dtw_band: int = hparams.DTW_BAND) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def compute_three_mats(
+    window: np.ndarray,
+    kind: str,
+    dtw_band: int = 8,
+    dtw_eps: float = 1e-8,
+    verbose: bool = False,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    window: [T, C] where C is the channel count
+    Returns:
+      dtw_mat, cov_mat, pearson_mat, each [C, C]
+    """
     T, C = window.shape
-    assert C == hparams.NUM_VARS
 
     pearson = np.corrcoef(window, rowvar=False)
     pearson = np.nan_to_num(pearson, nan=0.0, posinf=0.0, neginf=0.0)
@@ -40,7 +47,7 @@ def compute_three_mats(window: np.ndarray,
     cov = (w0.T @ w0) / max(T - 1, 1)
 
     dtw = np.zeros((C, C), dtype=np.float64)
-    zch = [z_norm_1d(window[:, i].astype(np.float64), eps=hparams.DTW_EPS) for i in range(C)]
+    zch = [z_norm_1d(window[:, i].astype(np.float64), eps=dtw_eps) for i in range(C)]
     for i in range(C):
         dtw[i, i] = 0.0
         for j in range(i + 1, C):
@@ -48,8 +55,11 @@ def compute_three_mats(window: np.ndarray,
             dtw[i, j] = d
             dtw[j, i] = d
 
-    print(f"[{kind}] three mats computed: pearson range=({pearson.min():.3f},{pearson.max():.3f}), "
-          f"cov range=({cov.min():.3g},{cov.max():.3g}), dtw range=({dtw.min():.3g},{dtw.max():.3g})")
+    if verbose:
+        print(
+            f"[{kind}] three mats computed: pearson range=({pearson.min():.3f},{pearson.max():.3f}), "
+            f"cov range=({cov.min():.3g},{cov.max():.3g}), dtw range=({dtw.min():.3g},{dtw.max():.3g})"
+        )
     return dtw, cov, pearson
 
 
@@ -58,7 +68,7 @@ def normalize_pearson_to_01(pearson: np.ndarray) -> np.ndarray:
     return np.clip(x, 0.0, 1.0)
 
 
-def normalize_cov_to_01(cov: np.ndarray, lo: float = hparams.COV_CLIP_LO, hi: float = hparams.COV_CLIP_HI) -> np.ndarray:
+def normalize_cov_to_01(cov: np.ndarray, lo: float, hi: float) -> np.ndarray:
     v = cov.reshape(-1)
     a = np.percentile(v, lo)
     b = np.percentile(v, hi)
@@ -69,7 +79,7 @@ def normalize_cov_to_01(cov: np.ndarray, lo: float = hparams.COV_CLIP_LO, hi: fl
     return np.clip(x, 0.0, 1.0)
 
 
-def normalize_dtw_to_01(dtw: np.ndarray, tau: float = hparams.DTW_TAU) -> np.ndarray:
+def normalize_dtw_to_01(dtw: np.ndarray, tau: float) -> np.ndarray:
     sim = np.exp(-dtw / max(tau, 1e-6))
     v = sim.reshape(-1)
     a, b = float(v.min()), float(v.max())
@@ -77,12 +87,3 @@ def normalize_dtw_to_01(dtw: np.ndarray, tau: float = hparams.DTW_TAU) -> np.nda
         return np.zeros_like(sim, dtype=np.float32)
     x = (sim - a) / (b - a)
     return np.clip(x, 0.0, 1.0).astype(np.float32)
-
-
-def mats_to_7x21(dtw: np.ndarray, cov: np.ndarray, pearson: np.ndarray) -> np.ndarray:
-    dtw01 = normalize_dtw_to_01(dtw)
-    cov01 = normalize_cov_to_01(cov)
-    pear01 = normalize_pearson_to_01(pearson)
-    combo = np.concatenate([dtw01, cov01, pear01], axis=1)
-    assert combo.shape == (hparams.NUM_VARS, 3 * hparams.NUM_VARS)
-    return combo.astype(np.float32)

@@ -1,12 +1,9 @@
 import torch.nn as nn
 
-from configs import hparams
 
-
-def build_ts_mlp():
-    model = nn.Sequential(
-        nn.Linear(hparams.PATCH_LEN, 2048),
+def build_ts_mlp(patch_len: int, embed_dim: int = 2048) -> nn.Module:
+    return nn.Sequential(
+        nn.Linear(patch_len, embed_dim),
         nn.GELU(),
-        nn.Linear(2048, 2048),
+        nn.Linear(embed_dim, embed_dim),
     )
-    return model
